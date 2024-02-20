@@ -5,11 +5,12 @@ function App() {
   const [data, setData] = useState([])
   const [error, setError] = useState(null)
   const [specimen, setSpecimen] = useState("")
+  const [response, setResponse] = useState("")
   useEffect(()=>{
 
     const fetchData = async ()=>{
       try{
-        const response = await fetch('/submit-data');
+        const response = await fetch('/questions-and-choices');
         if(!response.ok){
           throw Error(response.statusText)
         }
@@ -32,9 +33,12 @@ const postData = async () => {
       headers: {'Content-Type': 'application/json',},         
       body: JSON.stringify({ key: specimen }),
     });
-
     if(!postResponse.ok){
       throw Error(postResponse.statusText)
+    }
+    let result = await postResponse.text()
+    if(result){
+      setResponse(result)
     }
   }catch (err){
     console.log(err.message)
@@ -42,9 +46,12 @@ const postData = async () => {
   }
 }
 
+// Prevent the default form submit action to avoid page reload
 const handleButtonClick = (e) => {
   e.preventDefault(); 
-  postData()
+
+  // Call postData to send the form data to the server
+  postData();
 }
 
 const handleInputChange = (e) => {
@@ -52,16 +59,19 @@ const handleInputChange = (e) => {
 }
   return (
     <div className="App">
-    <form onSubmit={handleButtonClick}>
-    <label>
-      Input:
-      <input 
-      type="text" 
-      value={specimen} 
-      onChange={handleInputChange} />
-    </label>
-    <button type="submit">Submit</button>
-    </form>
+
+      {/* {(!response) && (<form onSubmit={handleButtonClick}>
+        <label>
+            Input:
+            <input 
+            type="text" 
+            value={specimen} 
+            onChange={handleInputChange} />
+        </label>
+        <button type="submit">Submit</button>
+    </form>)}
+      {response && <p> {response} You are present in this class</p>} */}
+    {data.elements}
     </div>
   );
 }
