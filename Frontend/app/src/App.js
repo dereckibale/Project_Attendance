@@ -33,12 +33,13 @@ function App() {
     fetchData();
   }, [])
 
-const postData = async () => {
+const postData = async (selectedValues) => {
   try{
+    
     const postResponse = await fetch('/submit-data', {
       method: 'POST',
       headers: {'Content-Type': 'application/json',},         
-      body: JSON.stringify({ key: specimen }),
+      body: JSON.stringify({ key: selectedValues }),
     });
     if(!postResponse.ok){
       throw Error(postResponse.statusText)
@@ -63,6 +64,7 @@ const handleSubmitButton = (e) => {
   });
   console.log(selectedValues);
   //setSpecimen(selectedValues);
+  postData(selectedValues);
 };
 const handleInputChange = (e) => {
   setSpecimen(e.target.value)
