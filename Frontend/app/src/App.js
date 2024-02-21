@@ -4,8 +4,10 @@ function App() {
 
   const [data, setData] = useState([])
   const [error, setError] = useState(null)
-  const [specimen, setSpecimen] = useState("")
+  const [specimen, setSpecimen] = useState(null)
   const [response, setResponse] = useState("")
+  const [question, setQuestions] = useState([])
+  const [choice, setChoices] = useState([])
   useEffect(()=>{
 
     const fetchData = async ()=>{
@@ -15,7 +17,12 @@ function App() {
           throw Error(response.statusText)
         }
         const result = await response.json();
-        setData(result)
+        let questions = result.elements
+        questions.map((element)=>{ 
+          question.push(element.question);
+          choice.push(...element.choices) });
+        console.log(choice)
+        setData(choice)
         
       } catch(err){
         console.log(err.message)
@@ -36,42 +43,53 @@ const postData = async () => {
     if(!postResponse.ok){
       throw Error(postResponse.statusText)
     }
-    let result = await postResponse.text()
-    if(result){
-      setResponse(result)
-    }
+    // let result = await postResponse.text()
+    // if(result){
+    //   setResponse(result)
+    //   console.log(result.elements)
+    // }
   }catch (err){
     console.log(err.message)
     setError(err.message)
   }
 }
 
-// Prevent the default form submit action to avoid page reload
-const handleButtonClick = (e) => {
-  e.preventDefault(); 
-
-  // Call postData to send the form data to the server
-  postData();
-}
-
+const handleSubmitButton = (e) => {
+    e.preventDefault();
+    const selectedValues = [];
+    const radioButtons = document.querySelectorAll('input[type=radio]:checked');// Retrieve the selected radio button values
+    radioButtons.forEach((radio) => {
+    selectedValues.push(radio.value);
+  });
+  console.log(selectedValues);
+  //setSpecimen(selectedValues);
+};
 const handleInputChange = (e) => {
   setSpecimen(e.target.value)
 }
   return (
     <div className="App">
 
-      {/* {(!response) && (<form onSubmit={handleButtonClick}>
-        <label>
-            Input:
-            <input 
-            type="text" 
-            value={specimen} 
-            onChange={handleInputChange} />
-        </label>
-        <button type="submit">Submit</button>
-    </form>)}
-      {response && <p> {response} You are present in this class</p>} */}
-    {data.elements}
+      {question.map((q, index) => (
+       
+          <div key={`question-${index}`} style={{ marginBottom: '10px' }}> 
+              <h3 style={{ marginLeft: 80 }}>{q}</h3>
+              <ul style={{ marginTop: '1px' }}> 
+                {choice.slice(index * 5, (index + 1) * 5).map((c, choiceIndex) => (
+                  <ul key={choiceIndex}>
+                    <label>
+                      <input type="radio" name={`question-${index}`} value={c} />
+                      {c}
+                    </label>
+                  </ul>
+                ))}
+              </ul>
+          </div>
+        
+          
+        ))
+      }
+    <button onClick={handleSubmitButton}>Submit Answers</button>
     </div>
   );
 }
