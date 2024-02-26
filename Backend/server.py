@@ -51,50 +51,34 @@ def questions_with_choices():
                 question = cell_address.value 
         questions_with_choices["elements"].append({'question': question, 'choices': choices})
         print(questions_with_choices)
-    
     return jsonify(questions_with_choices)
 
 @app.route('/submit-data', methods=['POST'])
 def submit_data():
-    data = request.json
-    value = data.get('key')
-    print('this from the /submit-data endpoint: ', value)
-    return value
-
-
-
-
-
-
-# @app.route("/questions-and-choices")
-# def questions_with_choices():
-#     questions_with_choices = {"elements":[]}
-#     workbook = openpyxl.load_workbook('ANSC121.xlsx')
-#     sheet = workbook['Questions']
-#     max_row = sheet.max_row
-#     columns = ['A', 'B', 'C', 'D', 'E', 'F']
-#     #correct_answers = []
-
-#     for row in range(2, max_row + 1):
-#         choices = []
-#         question = ''
-#         for column in columns: 
-#             if column != 'A':       
-#                 cell_address = sheet[column + str(row)] 
-#                 #cellAddress_Color = cell_address.fill.start_color.index
-#                 choice = cell_address.value
-#                 choices.append(choice)
-#                 # if cellAddress_Color == 'FFFFFF00':
-#                 #     correct_answer = cell_address.coordinate
-#                 #     correct_answers.append(correct_answer)
-#                 #print(cell_address.coordinate, " : ",cellAddress_Color, " : ",choice)
-#             else:
-#                 cell_address = sheet[column + str(row)]  
-#                 question = cell_address.value 
-#         questions_with_choices["elements"].append({'question': question, 'choices': choices})
-#         print(questions_with_choices)
     
-#     return jsonify(questions_with_choices)
+    data = request.json
+    value = data.get('key') #this the answer from students
+    print('this from the /submit-data endpoint: ', value)
+
+    #extract the correct answers first before comparing the answer from students
+    workbook = openpyxl.load_workbook('ANSC121.xlsx')
+    sheet = workbook['Questions']
+    max_row = sheet.max_row
+    columns = ['B', 'C', 'D', 'E', 'F']
+    correct_answers = []
+    for row in range(2, max_row + 1):
+        for column in columns: 
+                cell_address = sheet[column + str(row)] 
+                cellAddress_Color = cell_address.fill.start_color.index
+
+                if cellAddress_Color == 'FFFFFF00':
+                    correct_answer = cell_address.value
+                    correct_answers.append(correct_answer)
+    score =  #calculate the score by comparing two arrays, value and correct_answers
+    return jsonify(correct_answers)
+
+
+    
 if __name__ == "__main__":
     app.run(debug=True)
         

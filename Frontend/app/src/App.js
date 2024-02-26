@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import QuestionsChoices from './QuestionsChoices'
 
 function App() {
 
@@ -70,29 +71,7 @@ const handleInputChange = (e) => {
   setSpecimen(e.target.value)
 }
   return (
-    <div className="App">
-
-      {question.map((q, index) => (
-       
-          <div key={`question-${index}`} style={{ marginBottom: '10px' }}> 
-              <h3 style={{ marginLeft: 80 }}>{q}</h3>
-              <ul style={{ marginTop: '1px' }}> 
-                {choice.slice(index * 5, (index + 1) * 5).map((c, choiceIndex) => (
-                  <ul key={choiceIndex}>
-                    <label>
-                      <input type="radio" name={`question-${index}`} value={c} />
-                      {c}
-                    </label>
-                  </ul>
-                ))}
-              </ul>
-          </div>
-        
-          
-        ))
-      }
-    <button onClick={handleSubmitButton}>Submit Answers</button>
-    </div>
+    <QuestionsChoices question={question} choice={choice} handleSubmitButton={handleSubmitButton}/>
   );
 }
 
