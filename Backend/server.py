@@ -50,7 +50,7 @@ def questions_with_choices():
                 cell_address = sheet[column + str(row)]  
                 question = cell_address.value 
         questions_with_choices["elements"].append({'question': question, 'choices': choices})
-        print(questions_with_choices)
+        #print(questions_with_choices)
     return jsonify(questions_with_choices)
 
 @app.route('/submit-data', methods=['POST'])
@@ -73,9 +73,16 @@ def submit_data():
 
                 if cellAddress_Color == 'FFFFFF00':
                     correct_answer = cell_address.value
+                    if correct_answer is not str:
+                        correct_answer = str(correct_answer)
                     correct_answers.append(correct_answer)
-    score =  #calculate the score by comparing two arrays, value and correct_answers
-    return jsonify(correct_answers)
+    #calculate the score by comparing two arrays, value and correct_answers
+    score = len(set(value) & set(correct_answers))
+    #test_answers = set(value) & set(correct_answers)
+    print("Student's Answers: ", value)
+    print("Correct Answers:", correct_answers)
+    print("Your Score: ", score)
+    return jsonify(score)
 
 
     

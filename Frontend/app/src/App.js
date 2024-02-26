@@ -9,6 +9,8 @@ function App() {
   const [response, setResponse] = useState("")
   const [question, setQuestions] = useState([])
   const [choice, setChoices] = useState([])
+  const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [score, setScore] = useState(0)
   useEffect(()=>{
 
     const fetchData = async ()=>{
@@ -45,7 +47,9 @@ const postData = async (selectedValues) => {
     if(!postResponse.ok){
       throw Error(postResponse.statusText)
     }
-    // let result = await postResponse.text()
+     let result = await postResponse.text()
+     console.log(result)
+     setScore(result)
     // if(result){
     //   setResponse(result)
     //   console.log(result.elements)
@@ -66,12 +70,21 @@ const handleSubmitButton = (e) => {
   console.log(selectedValues);
   //setSpecimen(selectedValues);
   postData(selectedValues);
+  setHasSubmitted(!hasSubmitted)
+  console.log(hasSubmitted)
 };
 const handleInputChange = (e) => {
   setSpecimen(e.target.value)
 }
   return (
-    <QuestionsChoices question={question} choice={choice} handleSubmitButton={handleSubmitButton}/>
+    <>
+    {!hasSubmitted && <QuestionsChoices question={question} choice={choice} handleSubmitButton={handleSubmitButton}/>}
+     {hasSubmitted && (<>
+      <p>Thank You, You have already submitted</p>
+      <p>Your score is <strong>{score}</strong>!</p>
+     </>)}
+    </>
+   
   );
 }
 
