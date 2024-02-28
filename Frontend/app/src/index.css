@@ -21,19 +21,18 @@ code {
 .App{
   margin-left: 10px;
   margin-right: 10px;
-  
+  border: solid 1px;
 }
 
 .set{
-  border: solid 1px;
   margin-bottom: 20px;
   margin-top: 10px;
 }
 
 .Login{
   border: solid 5px;
-  margin-bottom: 20px;
-  margin-top: 20%;
+  margin-bottom: 20%;
+  margin-top: 8%;
   margin-left: 60px;
   margin-right: 60px;
   border-radius: 10px;
@@ -41,6 +40,7 @@ code {
 }
 
 #login-button {
+  margin: 0 auto;
   margin-top: 20px;
   margin-bottom: 20px;
   width: 200px;
@@ -54,4 +54,59 @@ code {
   cursor: pointer;
   font-weight: bold;
   color: aliceblue;
+}
+
+.question{
+  margin-left: 40px;
+}
+
+.submit-button{
+  margin-top: 20%;
+  margin-bottom: 20%;
+  margin-left: 25%;
+  width: 200px;
+  height: 50px;
+  border-radius: 5px;
+  background-color: aquamarine;
+  align-items: center;
+}
+
+.submit-button:hover{
+  cursor: pointer;
+  font-weight: bold;
+  color: aliceblue;
+  background-color: rgb(4, 88, 88);
+}
+
+.caution{
+  border: solid 1px;
+  margin-top: 20px;
+  color: red;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.reminder{
+  border: solid 1px;
+  margin-top: 20px;
+  color: navy;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+.logger{
+  text-decoration: underline;
+  }
+
+.welcome{
+  text-align: center;
+}
+
+.submission{
+  margin-top: 10%;
+  text-align: center;
+  font-weight: bold;
 }

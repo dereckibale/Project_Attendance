@@ -94,15 +94,20 @@ const handleSubmitButton = (e) => {
       <QuestionsChoices 
           data={data}
           handleRadioChange={handleRadioChange}
+          logger={passer}
         />
-        <button onClick={handleSubmitButton}>Submit Answer</button>
+        <h3 className='reminder'>You will start from top if you reload this page!</h3>
+        <div className="caution">DO NOT PROCEED HERE IF YOU ARE NOT READY TO SUBMIT! !</div>
+        <button className="submit-button" onClick={handleSubmitButton}>Submit Answer</button>
+       
     </>)}
+    
     {hasSubmitted && (
-    <>
+    <div className="submission">
       <strong>You have submitted!</strong>
       {score==itemNumber && <p>Congratulations you got the perfect score!</p>}
       <p>Score: {score}</p>
-    </>
+    </div>
     )
     }
     

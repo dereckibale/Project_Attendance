@@ -16,9 +16,9 @@ const Logger = ({ logger, setLogger, handleLogInformation }) => {
         id='login-button'
         >Start Exam?</button>
         </form>
+        <p className="reminder">Kung mka Start na ka sa exam dili na ka pwde mu exit sa browser kai gi monitor ni imo screen activity</p>
     </div>
-    
-  )
+    )
 }
 
 export default Logger
