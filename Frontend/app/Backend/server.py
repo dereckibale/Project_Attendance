@@ -53,7 +53,7 @@ def questions_with_choices():
         #print(questions_with_choices)
         studyante = students()
         date_logger(current_date)
-    return jsonify({"elements": elements, "studyante": studyante})
+    return jsonify({"elements": elements, "studyante": studyante, "time": current_date})
 
 def date_logger(current_date):
     
@@ -68,10 +68,10 @@ def date_logger(current_date):
             if cell_value is not None: 
                 if cell_value == current_date:
                     already_logged = True
-                    print(current_date, f" has already been logged into {sheet[column + str(row)].coordinate}")
+                    #print(current_date, f" has already been logged into {sheet[column + str(row)].coordinate}")
             elif cell_value is None and not already_logged:
                 sheet[column + str(row)].value = current_date
-                print(current_date, f" is now being logged into {sheet[column + str(row)].coordinate}")
+                #print(current_date, f" is now being logged into {sheet[column + str(row)].coordinate}")
                 already_logged = True
     workbook.save('ANSC121.xlsx')
 
@@ -82,16 +82,17 @@ def submit_data():
     current_date = datetime.datetime.now().strftime("%d/%m/%Y")
     data = request.json
     value = data.get('key') #this the answer from students
-    student = str(data.get('student'))
-    print('this from the /submit-data endpoint: ', value)
+    student = str(data.get('student')) #this is the student number sent from the user
     #extract the correct answers first before comparing the answer from students
     workbook = openpyxl.load_workbook('ANSC121.xlsx')
     sheet = workbook['Questions']
     max_row = sheet.max_row
-    columns = ['B', 'C', 'D', 'E', 'F']
+    columns = ['A', 'B', 'C', 'D', 'E', 'F']
     correct_answers = []
     for row in range(2, max_row + 1):
-        for column in columns: 
+        for column in columns:
+                if column == 'A':
+                    question = sheet[column + str(row)].value 
                 cell_address = sheet[column + str(row)] 
                 cellAddress_Color = cell_address.fill.start_color.index
 
@@ -99,11 +100,21 @@ def submit_data():
                     correct_answer = cell_address.value
                     if correct_answer is not str:
                         correct_answer = str(correct_answer)
-                    correct_answers.append(correct_answer)
+                    correct_answers.append({question: correct_answer})
     #calculate the score by comparing two arrays, value and correct_answers
-    score = len(set(value) & set(correct_answers))
-    print(f"STUDENT {student} SHOULD BE PRINTED HERE!")
-    score_logger(score, student, current_date)
+    #score = len(set(value) & set(correct_answers))
+    #print('This is the score of the student', score)
+    # print(f"STUDENT {student} SHOULD BE PRINTED HERE!")
+    student_answer = []
+    score = 0
+    for question_and_answer in value:
+        for correct_answer in correct_answers:
+            if question_and_answer == correct_answer:
+                score += 1    
+    #print(student_answer)
+    print(score)
+    print('This is the score of the student', score)
+    score_logger(score, student, current_date) 
     return jsonify(score)
 
 def score_logger(score, student_number, current_date):
@@ -141,6 +152,10 @@ def score_logger(score, student_number, current_date):
 
 
     workbook.save('ANSC121.xlsx')
+
+
+
+
 
 
     

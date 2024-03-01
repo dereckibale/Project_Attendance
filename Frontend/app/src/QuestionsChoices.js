@@ -14,7 +14,7 @@ const QuestionsChoices = ({ data, handleRadioChange, logger }) => {
                       <label key={`choice-${idx}`}>
                         <input 
                             type="radio" 
-                            name={`question-${index}`} 
+                            name={`${d.question}`} 
                             value={choice} 
                             onChange={(e) => handleRadioChange(e)}
                         />
